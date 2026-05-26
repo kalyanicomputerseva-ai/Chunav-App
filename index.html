@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ब्राह्मण समाज चुनाव 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #FDF6EC; font-family: 'DM Sans', sans-serif; color: #2D1400; padding-bottom: 80px; }
+    :root { --saffron: #E8570A; --maroon: #7B0C1C; --maroon-light: #A01228; --cream: #FDF6EC; --gold: #C8973A; --shadow: 0 8px 32px rgba(123,12,28,0.12); }
+    header { background: linear-gradient(135deg, #7B0C1C 0%, #4A0010 40%, #E8570A 100%); padding: 20px 16px 16px; text-align: center; color: white; position: relative; }
+    .header-om { font-size: 40px; font-family: 'Tiro Devanagari Hindi', serif; color: #E8B95A; }
+    header h1 { font-family: 'Tiro Devanagari Hindi', serif; font-size: 20px; margin: 4px 0; }
+    
+    /* Language Switcher Styling */
+    .lang-switcher-container { position: absolute; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.15); padding: 4px 8px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.25); display: flex; align-items: center; gap: 6px; }
+    .lang-switcher-container label { color: white; font-size: 11px; font-weight: bold; }
+    .lang-select { background: #7B0C1C; color: white; border: 1px solid var(--gold); padding: 4px 8px; border-radius: 8px; font-size: 12px; cursor: pointer; outline: none; font-weight: bold; }
+    .lang-select option { background: white; color: #2D1400; }
+
+    .container { max-width: 1300px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 24px; }
+    .card { background: white; border-radius: 28px; box-shadow: 0 8px 32px rgba(123,12,28,0.12); overflow: hidden; border: 1px solid rgba(200,151,58,0.2); }
+    .card-header { background: linear-gradient(135deg, var(--maroon), var(--maroon-light)); padding: 12px 18px; display: flex; align-items: center; gap: 10px; color: white; }
+    .card-header h2 { margin: 0; font-size: 1.1rem; }
+    .card-body { padding: 20px; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 16px; border: 1.5px solid #EDE0CE; background: #FEFAF3; font-size: 14px; margin-bottom: 12px; }
+    .btn { padding: 10px 16px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; }
+    .btn-primary { background: linear-gradient(135deg, #C04200, #FF7A2F); color: white; }
+    .btn-admin { background: linear-gradient(135deg, #7B0C1C, #A01228); color: white; }
+    .btn-success { background: #1E7A3A; color: white; }
+    .btn-danger { background: #B00020; color: white; }
+    .btn-warning { background: #E67E22; color: white; }
+    .btn-sm { padding: 5px 10px; font-size: 11px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px; }
+    .candidate-card { background: #FEFAF3; border-radius: 20px; padding: 16px; text-align: center; border: 2px solid #EDE0CE; cursor: pointer; transition: 0.2s; }
+    .candidate-card.active { border-color: var(--saffron); background: #FFF4EC; box-shadow: 0 5px 12px rgba(232,87,10,0.2); position: relative; }
+    .candidate-card.active::after { content: "✓"; position: absolute; top: 8px; right: 12px; background: var(--saffron); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+    .candidate-avatar { width: 60px; height: 60px; background: linear-gradient(135deg,var(--maroon),var(--saffron)); border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; }
+    .candidate-photo { width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin: 0 auto; border: 2px solid var(--gold); background: #f0e6d6; }
+    .section-title { display: flex; align-items: center; gap: 8px; margin: 18px 0 12px; border-left: 4px solid var(--saffron); padding-left: 12px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #7B0C1C; color: white; padding: 8px; text-align: left; font-size: 13px; }
+    td { padding: 8px; border-bottom: 1px solid #f0e6d6; font-size: 13px; }
+    .result-bar { height: 6px; background: #ede0ce; border-radius: 4px; margin-top: 6px; }
+    .result-bar-fill { background: linear-gradient(90deg,#E8570A,#FF9F5A); height: 100%; border-radius: 4px; }
+    .hidden { display: none !important; }
+    .msg { padding: 8px 12px; border-radius: 12px; margin-top: 12px; font-size: 13px; }
+    .msg.success { background: #d4edda; color: #155724; }
+    .msg.error { background: #f8d7da; color: #721c24; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .admin-login-btn { position: fixed; bottom: 20px; right: 20px; background: #7B0C1C; color: white; border: none; border-radius: 50px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .admin-panel-wrapper { position: fixed; top: 0; right: 0; width: 100%; max-width: 900px; height: 100%; background: white; z-index: 1100; box-shadow: -4px 0 20px rgba(0,0,0,0.2); transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; }
+    .admin-panel-wrapper.open { transform: translateX(0); }
+    .close-admin-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 28px; cursor: pointer; color: white; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1050; display: none; }
+    .overlay.show { display: block; }
+    .file-input-label { background: #EDE0CE; padding: 10px; border-radius: 16px; text-align: center; cursor: pointer; display: inline-block; width: 100%; }
+    .image-preview { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-top: 8px; border: 2px solid var(--gold); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-om">ॐ</div>
+  <h1 id="dynamicElectionTitle">ब्राह्मण समाज चुनाव 2026</h1>
+  <p id="subTitleTag">सुरक्षित मतदान | पूर्ण डिजिटल प्रशासन</p>
+  
+  <div class="lang-switcher-container">
+    <label for="langSelect">🌐 Bhasha:</label>
+    <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+      <option value="hi">हिंदी (Hindi)</option>
+      <option value="en">English</option>
+      <option value="sa">संस्कृतम् (Sanskrit)</option>
+    </select>
+  </div>
+</header>
+
+<div class="container">
+  <div class="card" id="voterLoginCard">
+    <div class="card-header"><span>🗳️</span><h2 id="lang_voterVerification">मतदाता सत्यापन</h2></div>
+    <div class="card-body">
+      <input type="text" id="voterName" placeholder="पूरा नाम">
+      <input type="text" id="voterPhone" placeholder="मोबाइल नंबर (10 अंक)" maxlength="10">
+      <button class="btn btn-primary" style="margin-top:8px;" id="lang_verifyBtn" onclick="verifyVoter()">📱 सत्यापित करें और मतदान करें</button>
+      <div id="voterMsg" class="msg"></div>
+    </div>
+  </div>
+
+  <div id="votingArea" class="card hidden">
+    <div class="card-header"><span>✋</span><h2 id="lang_castVoteHead">अपना वोट दें - प्रत्येक पद के लिए एक उम्मीदवार चुनें</h2></div>
+    <div class="card-body" id="dynamicVotingContainer"><div style="text-align:center;">लोड हो रहा...</div></div>
+    <div class="card-body"><button class="btn btn-primary" id="lang_submitVoteBtn" onclick="submitDynamicVote()">🗳️ अंतिम वोट सबमिट करें</button><div id="voteMsg" class="msg"></div></div>
+  </div>
+
+  <div class="card" id="resultCard">
+    <div class="card-header"><span>📊</span><h2 id="lang_liveResultsHead">Live परिणाम (रियल टाइम)</h2></div>
+    <div class="card-body" id="resultDynamicContainer"></div>
+  </div>
+
+  <div class="card" id="selfRegCard">
+    <div class="card-header"><span>📝</span><h2 id="lang_selfRegHead">उम्मीदवारी पंजीकरण (स्वयं) - फोटो वैकल्पिक</h2></div>
+    <div class="card-body">
+      <div class="grid-2">
+        <input type="text" id="selfName" placeholder="पूरा नाम *">
+        <input type="text" id="selfAge" placeholder="आयु">
+        <select id="selfGender">
+          <option value="" id="lang_genderOpt">लिंग</option>
+          <option value="पुरुष" id="lang_maleOpt">पुरुष</option>
+          <option value="महिला" id="lang_femaleOpt">महिला</option>
+          <option value="अन्य" id="lang_otherOpt">अन्य</option>
+        </select>
+        <input type="text" id="selfPhone" placeholder="मोबाइल नंबर">
+        <input type="text" id="selfWard" placeholder="क्षेत्र / वार्ड">
+        <input type="text" id="selfBio" placeholder="संक्षिप्त परिचय">
+        <select id="selfPost"><option value="" id="lang_selectPostOpt">पद चुनें *</option></select>
+        <div><label class="file-input-label" id="lang_uploadPhotoOpt">📸 फोटो अपलोड करें (वैकल्पिक)<input type="file" id="selfPhotoFile" accept="image/*" style="display:none;" onchange="previewSelfImage()"></label><img id="selfPreview" class="image-preview" style="display:none;"></div>
+      </div>
+      <button class="btn btn-primary" id="lang_submitRegBtn" onclick="selfRegisterWithPhoto()">📩 पंजीकरण सबमिट करें</button>
+      <div id="selfRegMsg" class="msg"></div>
+    </div>
+  </div>
+</div>
+
+<button class="admin-login-btn" id="adminLoginFloatingBtn" onclick="openAdminPanel()">🔐 Admin Login</button>
+<div class="overlay" id="adminOverlay" onclick="closeAdminPanel()"></div>
+<div class="admin-panel-wrapper" id="adminPanelWrapper">
+  <div style="background:#7B0C1C; padding:14px 20px; color:white; display:flex; justify-content:space-between;">
+    <span id="adminRoleDisplay">⚙️ एडमिन कंट्रोल पैनल</span>
+    <button class="close-admin-btn" id="closeAdminPanelBtn" onclick="closeAdminPanel()">&times;</button>
+  </div>
+  <div style="padding:20px;" id="adminPanelContent">
+    <div id="adminLoginInside">
+      <input type="text" id="adminUserInside" placeholder="Admin ID" value="Brahman2026">
+      <input type="password" id="adminPassInside" placeholder="Password" style="margin-top:12px;">
+      <button class="btn btn-admin" style="margin-top:16px; width:100%;" id="lang_loginBtn" onclick="adminLoginFromSidebar()">Login करें</button>
+      <div id="adminLoginMsgInside" class="msg"></div>
+    </div>
+    <div id="adminDashboardInside" class="hidden">
+      <div style="margin-bottom:16px; text-align:right;">
+        <button class="btn btn-primary btn-sm" id="lang_changePassBtn" onclick="showChangePassword()">🔑 बदलें पासवर्ड</button>
+        <button class="btn btn-danger btn-sm" id="lang_logoutBtn" onclick="adminLogout()">🚪 Logout</button>
+      </div>
+      <div id="adminDashContent">लोड हो रहा...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, where, setDoc, getDoc, updateDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7F8qZNjx4VtPzJOdRrErKSDzskHAqL-U",
+    authDomain: "brahman-chunav.firebaseapp.com",
+    projectId: "brahman-chunav",
+    storageBucket: "brahman-chunav.firebasestorage.app",
+    messagingSenderId: "1002990502302",
+    appId: "1:1002990502302:web:43d92613a560fd8e93168f"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+  
+  let votingEnabled = true;
+  let currentVoterPhone = null, currentVoterName = null;
+  let selectedCandidatesMap = {};
+  let activePosts = [];
+  let loggedInAdminRole = null, loggedInUsername = null, loggedInAdminId = null;
+  let currentLang = 'hi';
+
+  // Comprehensive Language Dictionary (Hindi, English, Sanskrit)
+  const langData = {
+    hi: {
+      title: "ब्राह्मण समाज चुनाव 2026",
+      subTitle: "सुरक्षित मतदान | पूर्ण डिजिटल प्रशासन",
+      voterVerification: "मतदाता सत्यापन",
+      voterNamePlace: "पूरा नाम",
+      voterPhonePlace: "मोबाइल नंबर (10 अंक)",
+      verifyBtn: "📱 सत्यापित करें और मतदान करें",
+      castVoteHead: "अपना vote दें - प्रत्येक पद के लिए एक उम्मीदवार चुनें",
+      submitVoteBtn: "🗳️ अंतिम वोट सबमिट करें",
+      liveResultsHead: "Live परिणाम (रियल टाइम)",
+      selfRegHead: "उम्मीदवारी पंजीकरण (स्वयं) - फोटो वैकल्पिक",
+      selfNamePlace: "पूरा नाम *",
+      selfAgePlace: "आयु",
+      genderOpt: "लिंग",
+      maleOpt: "पुरुष",
+      femaleOpt: "महिला",
+      otherOpt: "अन्य",
+      selfPhonePlace: "मोबाइल नंबर",
+      selfWardPlace: "क्षेत्र / वार्ड",
+      selfBioPlace: "संक्षिप्त परिचय",
+      selectPostOpt: "पद चुनें *",
+      uploadPhotoOpt: "📸 फोटो अपलोड करें (वैकल्पिक)",
+      submitRegBtn: "📩 पंजीकरण सबमिट करें",
+      loading: "लोड हो रहा...",
+      noCandidate: "❌ इस पद के लिए कोई उम्मीदवार नहीं है।",
+      noPostDefined: "अभी कोई पद परिभाषित नहीं है।",
+      votesText: "वोट",
+      progressText: "प्रगति",
+      candidateText: "उम्मीदवार",
+      loginBtn: "Login करें",
+      changePassBtn: "🔑 बदलें पासवर्ड",
+      logoutBtn: "🚪 Logout",
+      adminTitle: "⚙️ एडमिन कंट्रोल पैनल",
+      alertVotingClosed: "वोटिंग बंद है",
+      alertInvalidDetails: "सही नाम और 10 अंक मोबाइल दर्ज करें",
+      alertAlreadyVoted: "आप पहले vote दे चुके हैं",
+      alertDeviceVoted: "इस डिवाइस से पहले vote हो चुका है",
+      alertSuccessVerify: "✅ सत्यापन सफल! नीचे उम्मीदवार दिख रहे हैं।",
+      alertSelectCandidate: "कृपया इस पद के लिए एक उम्मीदवार चुनें: ",
+      alertSessionExpired: "सत्र समाप्त",
+      alertVoteSubmitted: "🎉 vote सफलतापूर्वक दर्ज! धन्यवाद",
+      alertFillRequired: "कृपया नाम और पद चुनें"
+    },
+    en: {
+      title: "Brahman Samaj Election 2026",
+      subTitle: "Secure Voting | Complete Digital Administration",
+      voterVerification: "Voter Verification",
+      voterNamePlace: "Full Name",
+      voterPhonePlace: "Mobile Number (10 Digits)",
+      verifyBtn: "📱 Verify & Proceed to Vote",
+      castVoteHead: "Cast Your Vote - Select one candidate for each post",
+      submitVoteBtn: "🗳️ Submit Final Vote",
+      liveResultsHead: "Live Results (Real-Time)",
+      selfRegHead: "Candidate Self-Registration - Photo Optional",
+      selfNamePlace: "Full Name *",
+      selfAgePlace: "Age",
+      genderOpt: "Gender",
+      maleOpt: "Male",
+      femaleOpt: "Female",
+      otherOpt: "Other",
+      selfPhonePlace: "Mobile Number",
+      selfWardPlace: "Region / Ward",
+      selfBioPlace: "Short Biography",
+      selectPostOpt: "Select Post *",
+      uploadPhotoOpt: "📸 Upload Photo (Optional)",
+      submitRegBtn: "📩 Submit Registration",
+      loading: "Loading...",
+      noCandidate: "❌ No candidates available for this post.",
+      noPostDefined: "No posts are defined yet.",
+      votesText: "Votes",
+      progressText: "Progress",
+      candidateText: "Candidate",
+      loginBtn: "Login",
+      changePassBtn: "🔑 Change Password",
+      logoutBtn: "🚪 Logout",
+      adminTitle: "⚙️ Admin Control Panel",
+      alertVotingClosed: "Voting is closed",
+      alertInvalidDetails: "Please enter correct name and 10 digit mobile",
+      alertAlreadyVoted: "You have already cast your vote",
+      alertDeviceVoted: "A vote has already been cast from this device",
+      alertSuccessVerify: "✅ Verification Successful! Candidates listed below.",
+      alertSelectCandidate: "Please select a candidate for: ",
+      alertSessionExpired: "Session Expired",
+      alertVoteSubmitted: "🎉 Vote Submitted Successfully! Thank You",
+      alertFillRequired: "Please enter Name and select Post"
+    },
+    sa: {
+      title: "ब्राह्मणसमाज निर्वाचनम् २०२६",
+      subTitle: "सुरक्षितं मतदानम् | पूर्णं डिजिटल प्रशासनम्",
+      voterVerification: "मतदाता सत्यापनम्",
+      voterNamePlace: "पूर्णं नाम",
+      voterPhonePlace: "चलदूरभाषसङ्ख्या (१० अङ्काः)",
+      verifyBtn: "📱 सत्यापितं कृत्वा मतदानं कुर्वन्तु",
+      castVoteHead: "स्वमतं ददतु - प्रत्येकपदाय एकं अभ्यर्थिनं चिनोतु",
+      submitVoteBtn: "🗳️ अन्तिममतं समर्पयतु",
+      liveResultsHead: "सद्यः परिणामः (वास्तविकसमयः)",
+      selfRegHead: "अभ्यर्थी आत्म-पञ्जीकरणम् - चित्रं वैकल्पिकम्",
+      selfNamePlace: "पूर्णं नाम *",
+      selfAgePlace: "वयः",
+      genderOpt: "लिङ्गम्",
+      maleOpt: "पुरुषः",
+      femaleOpt: "महिला",
+      otherOpt: "अन्य",
+      selfPhonePlace: "चलदूरभाषसङ्ख्या",
+      selfWardPlace: "क्षेत्रम् / वार्डः",
+      selfBioPlace: "सङ्क्षिप्तपरिचयः",
+      selectPostOpt: "पदं चिनोतु *",
+      uploadPhotoOpt: "📸 चित्रं अपलोड् कुर्वन्तु (वैकल्पिकम्)",
+      submitRegBtn: "📩 पञ्जीकरणं समर्पयतु",
+      loading: "लोड् भवति...",
+      noCandidate: "❌ अस्य पदस्य कृते कोऽपि अभ्यर्थी नास्ति।",
+      noPostDefined: "अधुना कोऽपि पदं निश्चितं नास्ति।",
+      votesText: "मतम्",
+      progressText: "प्रगतिः",
+      candidateText: "अभ्यर्थी",
+      loginBtn: "प्रवेशं कुर्वन्तु (Login)",
+      changePassBtn: "🔑 कूटशब्दं परिवर्तयतु",
+      logoutBtn: "🚪 बहिर्गमनम् (Logout)",
+      adminTitle: "⚙️ प्रबन्धक नियन्त्रण कक्ष",
+      alertVotingClosed: "मतदानं स्थगितम् अस्ति",
+      alertInvalidDetails: "कृपया समीचीनं नाम १० अङ्कात्मकं दूरभाषं च लिखन्तु",
+      alertAlreadyVoted: "भवान् पूर्वमेव मतदानं कृतवान्",
+      alertDeviceVoted: "अस्मात् यन्त्रात् पूर्वमेव मतदानं जातम्",
+      alertSuccessVerify: "✅ सत्यापनं सफलम्! अधः अभ्यर्थिनः दृश्याः सन्ति।",
+      alertSelectCandidate: "कृपया अस्य पदस्य कृते एकं अभ्यर्थिनं चिनोतु: ",
+      alertSessionExpired: "सत्रं समाप्तम्",
+      alertVoteSubmitted: "🎉 मतं सफलतापूर्वकं पञ्जीकृतम्! धन्यवादः",
+      alertFillRequired: "कृपया नाम पदं च चिनोतु"
+    }
+  };
+
+  window.changeLanguage = function(lang) {
+    currentLang = lang;
+    const dict = langData[lang];
+
+    // Update Headings & Texts
+    document.getElementById('dynamicElectionTitle').innerText = dict.title;
+    document.getElementById('subTitleTag').innerText = dict.subTitle;
+    document.getElementById('lang_voterVerification').innerText = dict.voterVerification;
+    document.getElementById('lang_verifyBtn').innerText = dict.verifyBtn;
+    document.getElementById('lang_castVoteHead').innerText = dict.castVoteHead;
+    document.getElementById('lang_submitVoteBtn').innerText = dict.submitVoteBtn;
+    document.getElementById('lang_liveResultsHead').innerText = dict.liveResultsHead;
+    document.getElementById('lang_selfRegHead').innerText = dict.selfRegHead;
+    document.getElementById('lang_submitRegBtn').innerText = dict.submitRegBtn;
+    document.getElementById('lang_loginBtn').innerText = dict.loginBtn;
+    document.getElementById('lang_changePassBtn').innerText = dict.changePassBtn;
+    document.getElementById('lang_logoutBtn').innerText = dict.logoutBtn;
+
+    // Update Dropdown Options
+    document.getElementById('lang_genderOpt').innerText = dict.genderOpt;
+    document.getElementById('lang_maleOpt').innerText = dict.maleOpt;
+    document.getElementById('lang_femaleOpt').innerText = dict.femaleOpt;
+    document.getElementById('lang_otherOpt').innerText = dict.otherOpt;
+    document.getElementById('lang_selectPostOpt').innerText = dict.selectPostOpt;
+    document.getElementById('lang_uploadPhotoOpt').innerHTML = `📸 ${dict.uploadPhotoOpt}<input type="file" id="selfPhotoFile" accept="image/*" style="display:none;" onchange="previewSelfImage()">`;
+
+    // Update Placeholders
+    document.getElementById('voterName').placeholder = dict.voterNamePlace;
+    document.getElementById('voterPhone').placeholder = dict.voterPhonePlace;
+    document.getElementById('selfName').placeholder = dict.selfNamePlace;
+    document.getElementById('selfAge').placeholder = dict.selfAgePlace;
+    document.getElementById('selfPhone').placeholder = dict.selfPhonePlace;
+    document.getElementById('selfWard').placeholder = dict.selfWardPlace;
+    document.getElementById('selfBio').placeholder = dict.selfBioPlace;
+
+    // Re-render Dynamic Elements to apply translation
+    buildVotingInterface();
+    renderResults();
+    if(loggedInAdminRole) renderAdminDashboard();
+  };
+
+  function showMsg(el, type, txt) { if(el){ el.textContent=txt; el.className=`msg ${type} show`; setTimeout(()=>{if(el)el.classList.remove('show');},4000);} }
+  
+  async function loadSettingsAndApply() {
+    const snap = await getDoc(doc(db,'settings','main'));
+    if(snap.exists()){
+      const d=snap.data();
+      votingEnabled = d.votingEnabled !== undefined ? d.votingEnabled : true;
+      if(d.electionTitle) {
+        langData.hi.title = d.electionTitle;
+        if(currentLang === 'hi') document.getElementById('dynamicElectionTitle').innerText = d.electionTitle;
+      }
+      if(d.resultVisible === false) document.getElementById('resultCard').style.display = 'none';
+      else document.getElementById('resultCard').style.display = 'block';
+    } else {
+      await setDoc(doc(db,'settings','main'), { votingEnabled:true, resultVisible:true, electionTitle:'ब्राह्मण समाज चुनाव 2026' });
+    }
+  }
+  
+  async function loadActivePosts() {
+    const q = query(collection(db,'posts'), where('active','==',true));
+    const snap = await getDocs(q);
+    activePosts = snap.docs.map(d => ({ id:d.id, name:d.data().name }));
+    return activePosts;
+  }
+  
+  async function ensureDefaultPosts() {
+    const snap = await getDocs(collection(db,'posts'));
+    if(snap.empty){
+      await addDoc(collection(db,'posts'), { name:'अध्यक्ष', active:true });
+      await addDoc(collection(db,'posts'), { name:'उपाध्यक्ष', active:true });
+    }
+  }
+  
+  async function ensureMainAdmin() {
+    const adminsSnap = await getDocs(collection(db,'admins'));
+    let mainDoc = null;
+    adminsSnap.forEach(d => { if(d.data().username === 'Brahman2026') mainDoc = d; });
+    if(mainDoc) {
+      if(mainDoc.data().password !== 'Mahraj@2026') {
+        await updateDoc(doc(db,'admins',mainDoc.id), { password: 'Mahraj@2026' });
+      }
+    } else {
+      await addDoc(collection(db,'admins'), { username:'Brahman2026', password:'Mahraj@2026', role:'superadmin', adminType:'superadmin', createdAt:new Date() });
+    }
+  }
+  
+  function isTestVoter(phone,name) { return phone === '0000000000' && name.toLowerCase() === 'shreeram'; }
+  
+  // VOTER FLOW
+  window.verifyVoter = async function() {
+    const dict = langData[currentLang];
+    if(!votingEnabled){ alert(dict.alertVotingClosed); return; }
+    let name = document.getElementById('voterName').value.trim();
+    let phone = document.getElementById('voterPhone').value.trim();
+    if(name.length<3 || phone.length!==10){ alert(dict.alertInvalidDetails); return; }
+    const voterQuery = query(collection(db,'voters'), where('phone','==',phone));
+    const snap = await getDocs(voterQuery);
+    if(!snap.empty && snap.docs[0].data().voted===true && !isTestVoter(phone,name)){ alert(dict.alertAlreadyVoted); return; }
+    if(localStorage.getItem('votedDevice')==='yes' && !isTestVoter(phone,name)){ alert(dict.alertDeviceVoted); return; }
+    currentVoterPhone = phone; currentVoterName = name;
+    await loadActivePosts();
+    await buildVotingInterface();
+    document.getElementById('votingArea').classList.remove('hidden');
+    document.getElementById('voterLoginCard').style.display = 'none';
+    showMsg(document.getElementById('voterMsg'), 'success', dict.alertSuccessVerify);
+    document.getElementById('votingArea').scrollIntoView({ behavior: 'smooth' });
+  };
+  
+  async function buildVotingInterface() {
+    const container = document.getElementById('dynamicVotingContainer');
+    if(!container) return;
+    const dict = langData[currentLang];
+    const posts = await loadActivePosts();
+    const candidatesSnap = await getDocs(collection(db,'candidates'));
+    const candidates = candidatesSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    if(posts.length === 0){ container.innerHTML = `<div class="msg error">${dict.noPostDefined}</div>`; return; }
+    let html = ''; selectedCandidatesMap = {};
+    for(let post of posts){
+      const normPost = post.name.trim().toLowerCase();
+      const postCands = candidates.filter(c => (c.post || "").trim().toLowerCase() === normPost);
+      if(postCands.length === 0){
+        html += `<div class="section-title"><h3>${post.name}</h3></div><p style="color:gray; padding:8px;">${dict.noCandidate}</p>`;
+        continue;
+      }
+      html += `<div class="section-title"><h3>${post.name}</h3></div><div class="grid-2">`;
+      postCands.forEach(cand => {
+        const avatar = cand.photo ? `<img src="${cand.photo}" class="candidate-photo">` : `<div class="candidate-avatar">${cand.name.charAt(0)}</div>`;
+        const ageString = cand.age ? cand.age + (currentLang === 'sa' ? ' वयः' : currentLang === 'en' ? ' Yrs' : ' वर्ष') : '';
+        html += `<div class="candidate-card" data-post="${post.name}" data-candidate="${cand.id}" onclick="selectDynamicCandidate('${post.name.replace(/'/g, "\\'")}','${cand.id}')" id="cand_${cand.id}">
+          ${avatar}<div class="candidate-name" style="font-weight:bold;">${cand.name}</div><div>${ageString} ${cand.gender || ''}</div><div>${cand.ward || ''}</div><div style="font-size:11px;">${cand.bio || ''}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    container.innerHTML = html;
+  }
+  
+  window.selectDynamicCandidate = function(postName, candId) {
+    selectedCandidatesMap[postName] = candId;
+    document.querySelectorAll(`.candidate-card[data-post="${postName}"]`).forEach(c=>c.classList.remove('active'));
+    document.getElementById(`cand_${candId}`).classList.add('active');
+  };
+  
+  window.submitDynamicVote = async function() {
+    const dict = langData[currentLang];
+    if(!votingEnabled && !isTestVoter(currentVoterPhone, currentVoterName)){ alert(dict.alertVotingClosed); return; }
+    const posts = await loadActivePosts();
+    for(let post of posts) if(!selectedCandidatesMap[post.name]){ alert(`${dict.alertSelectCandidate}"${post.name}"`); return; }
+    const phone = currentVoterPhone;
+    if(!phone) { alert(dict.alertSessionExpired); return; }
+    const voterRef = doc(db,'voters',phone);
+    const voterSnap = await getDoc(voterRef);
+    if(voterSnap.exists() && voterSnap.data().voted===true && !isTestVoter(phone,currentVoterName)){ alert(dict.alertAlreadyVoted); return; }
+    const batch = writeBatch(db);
+    for(let [postName, candId] of Object.entries(selectedCandidatesMap)){
+      const candRef = doc(db,'candidates',candId);
+      const candSnap = await getDoc(candRef);
+      batch.update(candRef, { votes: (candSnap.data().votes||0)+1 });
+    }
+    await setDoc(voterRef, { name:currentVoterName, phone, voted:true, votedAt:new Date(), testVoter: isTestVoter(phone,currentVoterName) });
+    await addDoc(collection(db,'votes'), { phone, selections:selectedCandidatesMap, createdAt:new Date() });
+    await batch.commit();
+    localStorage.setItem('votedDevice','yes');
+    alert(dict.alertVoteSubmitted);
+    document.getElementById('votingArea').classList.add('hidden');
+    document.getElementById('voterLoginCard').style.display = 'block';
+    document.getElementById('voterName').value = ''; document.getElementById('voterPhone').value = '';
+    renderResults();
+  };
+  
+  async function renderResults() {
+    const dict = langData[currentLang];
+    const candidatesSnap = await getDocs(collection(db,'candidates'));
+    const candidates = candidatesSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    const posts = await loadActivePosts();
+    let html = '';
+    for(let post of posts){
+      const normPost = post.name.trim().toLowerCase();
+      const postCands = candidates.filter(c => (c.post || "").trim().toLowerCase() === normPost).sort((a,b)=>(b.votes||0)-(a.votes||0));
+      const total = postCands.reduce((s,c)=>s+(c.votes||0),0);
+      html += `<div style="margin-bottom:24px;"><h3 style="color:#7B0C1C;">🏛️ ${post.name}</h3><table style="width:100%"><thead><tr><th>${dict.candidateText}</th><th>${dict.votesText}</th><th>%</th><th>${dict.progressText}</th></tr></thead><tbody>`;
+      postCands.forEach(c => {
+        let percent = total ? ((c.votes||0)/total*100).toFixed(1) : 0;
+        let crown = (postCands[0] && postCands[0].id === c.id && (c.votes||0)>0) ? "👑 " : "";
+        html += `<tr><td><strong>${crown}${c.name}</strong><br><small>${c.age||''} ${c.gender||''} ${c.ward||''}</small></td><td>${c.votes||0}</td><td>${percent}%</td><td><div class="result-bar"><div class="result-bar-fill" style="width:${percent}%"></div></div></td></tr>`;
+      });
+      html += `</tbody></table></div>`;
+    }
+    document.getElementById('resultDynamicContainer').innerHTML = html || `<p>${dict.noCandidate}</p>`;
+  }
+  
+  // SELF REGISTRATION (with phone)
+  window.previewSelfImage = function() {
+    const file = document.getElementById('selfPhotoFile').files[0];
+    if(file){ const reader = new FileReader(); reader.onload = e => { document.getElementById('selfPreview').src = e.target.result; document.getElementById('selfPreview').style.display = 'block'; }; reader.readAsDataURL(file); }
+  };
+  
+  window.selfRegisterWithPhoto = async function() {
+    const dict = langData[currentLang];
+    const name = document.getElementById('selfName').value.trim();
+    const post = document.getElementById('selfPost').value;
+    if(!name || !post) { alert(dict.alertFillRequired); return; }
+    const age = document.getElementById('selfAge').value.trim();
+    const gender = document.getElementById('selfGender').value;
+    const phone = document.getElementById('selfPhone').value.trim();
+    const ward = document.getElementById('selfWard').value;
+    const bio = document.getElementById('selfBio').value;
+    let photoURL = "";
+    const file = document.getElementById('selfPhotoFile').files[0];
+    if(file) {
+      try {
+        const storageRef = ref(storage, `candidate_photos/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        photoURL = await getDownloadURL(storageRef);
+      } catch(e) { console.error(e); alert('Photo upload failed, continuing without photo'); }
+    }
+    await addDoc(collection(db,'pending_candidates'), { name, post, age, gender, phone, ward, bio, photo: photoURL, approved:false, requestType:'add', createdAt:new Date() });
+    
+    const successMsg = currentLang === 'sa' ? '✅ पञ्जीकरणं सबमिट् अभवत्, प्रबन्धकस्य अनुमतेः परं दृश्यते।' : currentLang === 'en' ? '✅ Registration submitted, will show after admin approval.' : '✅ पंजीकरण सबमिट, एडमिन स्वीकृति के बाद उम्मीदवार दिखेगा';
+    showMsg(document.getElementById('selfRegMsg'),'success', successMsg);
+    document.getElementById('selfName').value=''; document.getElementById('selfAge').value=''; document.getElementById('selfGender').value=''; document.getElementById('selfPhone').value=''; document.getElementById('selfWard').value=''; document.getElementById('selfBio').value=''; document.getElementById('selfPhotoFile').value=''; document.getElementById('selfPreview').style.display='none';
+  };
+  
+  // ADMIN DASHBOARD WITH PROPER DELETION REQUEST MANAGEMENT
+  async function renderAdminDashboard() {
+    const dashDiv = document.getElementById('adminDashContent');
+    if(!dashDiv) return;
+    await loadActivePosts();
+    const isSuper = (loggedInAdminRole === 'superadmin');
+    const isHead = (loggedInAdminRole === 'headadmin');
+    const dict = langData[currentLang];
+    
+    // Update header role display
+    let roleText = '';
+    if(isSuper) roleText = currentLang==='sa'?'👑 मुख्यप्रबन्धकः':currentLang==='en'?'👑 Main Admin':'👑 मुख्य एडमिन';
+    else if(isHead) roleText = currentLang==='sa'?'👥 प्रबन्धकप्रमुखः':currentLang==='en'?'👥 Head Admin':'👥 एडमिन हेड';
+    else roleText = currentLang==='sa'?'🔹 उपप्रबन्धकः':currentLang==='en'?'🔹 Sub Admin':'🔹 उप एडमिन';
+    document.getElementById('adminRoleDisplay').innerHTML = `${dict.adminTitle} (${roleText} : ${loggedInUsername})`;
+    
+    // Candidates Table with all fields
+    const candSnap = await getDocs(collection(db,'candidates'));
+    let candHtml = `<h4>📋 ${currentLang==='sa'?'अभ्यर्थी सूची':'Candidate List'}</h4><div style="overflow-x:auto;"><table style="width:100%"><thead><tr><th>${currentLang==='sa'?'नाम':'Name'}</th><th>${currentLang==='sa'?'पदम्':'Post'}</th><th>${currentLang==='sa'?'वयः':'Age'}</th><th>${currentLang==='sa'?'लिङ्गम्':'Gender'}</th><th>${currentLang==='sa'?'दूरभाषः':'Mobile'}</th><th>${currentLang==='sa'?'क्षेत्रम्':'Ward'}</th><th>${dict.votesText}</th><th>${currentLang==='sa'?'चित्रम्':'Photo'}</th><th></th><th></th></tr></thead><tbody>';`;
+    candSnap.forEach(d=>{ 
+      const c=d.data(); 
+      candHtml += `<tr>
+         <td>${c.name}</td><td>${c.post}</td><td>${c.age||''}</td><td>${c.gender||''}</td><td>${c.phone||''}</td><td>${c.ward||''}</td><td>${c.votes||0}</td><td>${c.photo ? '✓' : '—'}</td>
+          <td><button class="btn btn-primary btn-sm" onclick="editCandidateFull('${d.id}')">✏️ ${currentLang==='sa'?'सम्पादनम्':currentLang==='en'?'Edit':'संपादन'}</button></td>
+          <td><button class="btn btn-danger btn-sm" onclick="handleCandidateDeleteGate('${d.id}', '${c.name.replace(/'/g, "\\'")}')">${currentLang==='sa'?'अपाकुरु':currentLang==='en'?'Delete':'हटाएँ'}</button></td>
+        </tr>`; 
+    });
+    candHtml += `</tbody></table></div><hr><h4>➕ ${currentLang==='sa'?'नूतन अभ्यर्थी योजयतु':'Add New Candidate'}</h4><div class="grid-2">
+      <input type="text" id="newCandName" placeholder="Name *">
+      <select id="newCandPost">${activePosts.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select>
+      <input type="text" id="newCandAge" placeholder="Age">
+      <select id="newCandGender"><option value="">Gender</option><option value="पुरुष">Male</option><option value="महिला">Female</option><option value="अन्य">Other</option></select>
+      <input type="text" id="newCandPhone" placeholder="Mobile">
+      <input type="text" id="newCandWard" placeholder="Ward">
+      <input type="text" id="newCandBio" placeholder="Bio">
+      <div><label class="file-input-label">📸 Photo<input type="file" id="newCandPhotoFile" accept="image/*" style="display:none;" onchange="previewNewImage()"></label><img id="newPreview" class="image-preview" style="display:none;"></div>
+    </div><button class="btn btn-primary" onclick="addCandidateWithPhoto()">+ Add</button><hr>`;
+    
+    // Posts management
+    let postsHtml = '';
+    if(isSuper || isHead) {
+      const postsSnap = await getDocs(collection(db,'posts'));
+      postsHtml = `<h4>📌 ${currentLang==='sa'?'पद प्रबन्धनम्':currentLang==='en'?'Post Management':'पद प्रबंधन'}</h4><div><input type="text" id="newPostName" placeholder="New Post"><button class="btn btn-primary btn-sm" onclick="createNewPost()">Create</button></div><ul>`;
+      postsSnap.forEach(d=>{ postsHtml += `<li class="flex-between">${d.data().name} <button class="btn btn-danger btn-sm" onclick="deletePost('${d.id}')">X</button></li>`; });
+      postsHtml += `</ul><hr>`;
+    }
+    
+    // Pending approvals & Deletion Requests combined
+    const pendingSnap = await getDocs(collection(db,'pending_candidates'));
+    let pendingHtml = `<h4>⏳ ${currentLang==='sa'?'लम्बित अनुरोधाः':'Pending Requests'}</h4>`;
+    for(const ds of pendingSnap.docs){ 
+      const p=ds.data(); 
+      let actionButtons = '';
+      let requestBadge = `<span style="background:#d4edda; color:#155724; padding:2px 6px; border-radius:8px; font-size:11px;">New Reg</span>`;
+      
+      if(p.requestType === 'delete') {
+        requestBadge = `<span style="background:#f8d7da; color:#721c24; padding:2px 6px; border-radius:8px; font-size:11px;">❌ Deletion Req (${p.requestedBy || 'Admin'})</span>`;
+      }
+
+      if(isSuper) {
+        if(p.requestType === 'delete') {
+          actionButtons = `<button class="btn btn-danger btn-sm" onclick="approveDeletionRequest('${ds.id}','${p.candidateId}')">🗑️ Permanently Delete</button> <button class="btn btn-warning btn-sm" onclick="rejectCandidate('${ds.id}')">X Reject</button>`;
+        } else {
+          actionButtons = `<button class="btn btn-success btn-sm" onclick="approveCandidate('${ds.id}')">✅ Accept</button> <button class="btn btn-danger btn-sm" onclick="rejectCandidate('${ds.id}')">X Reject</button>`;
+        }
+      } else {
+        actionButtons = `<span style="color:#B00020; font-size:11px; font-weight:bold;">🔒 Action only by Main Admin</span>`;
+      }
+
+      pendingHtml += `<div style="border:1px solid #ede0ce; border-radius:16px; padding:10px; margin-bottom:8px; background:#FEFAF3;">
+          <div class="flex-between"><strong>${p.name}</strong> (${p.post}) ${requestBadge}</div>
+          Mobile: ${p.phone||'—'} | Ward: ${p.ward||'—'}<br>
+          ${p.photo? `<img src="${p.photo}" width="40" height="40" style="border-radius:50%; margin-top:4px;">` : ''}<br>
+          <div style="margin-top:6px;">${actionButtons}</div>
+      </div>`; 
+    }
+    if(pendingSnap.empty) pendingHtml += '<p>No pending requests</p><hr>'; else pendingHtml += '<hr>';
+    
+    // Admin Management
+    let adminHtml = '';
+    if(isSuper || isHead) {
+      const adminsSnap = await getDocs(collection(db,'admins'));
+      let adminListHtml = `<h4>👥 ${currentLang==='sa'?'प्रबन्धक सूची':'Admin List'}</h4><table style="width:100%"><thead><tr><th>Username</th><th>Type</th><th></th><th></th></tr></thead><tbody>`;
+      adminsSnap.forEach(d=>{ const a=d.data(); 
+        let delBtn = '', resetBtn = '';
+        if((isSuper || isHead) && a.username !== 'Brahman2026' && a.username !== loggedInUsername) delBtn = `<button class="btn btn-danger btn-sm" onclick="deleteSubAdmin('${d.id}')">Remove</button>`;
+        if(isSuper || isHead) resetBtn = `<button class="btn btn-warning btn-sm" onclick="resetAdminPassword('${d.id}','${a.username}')">Reset Pass</button>`;
+        adminListHtml += `<tr><td>${a.username}${a.username === 'Brahman2026' ? ' (Main)' : ''}</td><td>${a.adminType === 'superadmin' ? 'Main Admin' : (a.adminType==='headadmin'?'Head Admin':'Sub Admin')}</td><td>${resetBtn}</td><td>${delBtn}</td></tr>`;
+      });
+      adminListHtml += `</tbody></td>`;
+      let createHtml = '';
+      if(isSuper) {
+        createHtml = `<div style="margin-top:16px;"><h4>➕ Create Admin</h4><div class="grid-2"><input type="text" id="newSubAdminUser" placeholder="Username"><input type="password" id="newSubAdminPass" placeholder="Password"><select id="newSubAdminType"><option value="subadmin">Sub Admin</option><option value="headadmin">Head Admin</option></select></div><button class="btn btn-primary btn-sm" onclick="createSubAdmin()">Create</button></div>`;
+      } else if(isHead) {
+        createHtml = `<div style="margin-top:16px;"><h4>➕ Create Sub-Admin</h4><div class="grid-2"><input type="text" id="newSubAdminUser" placeholder="Username"><input type="password" id="newSubAdminPass" placeholder="Password"></div><button class="btn btn-primary btn-sm" onclick="createSubAdminByHead()">Create</button></div>`;
+      }
+      adminHtml = adminListHtml + createHtml + '<hr>';
+    }
+    
+    // Voter details
+    let voterHtml = '';
+    if(isSuper || isHead) {
+      const votersSnap = await getDocs(collection(db,'voters'));
+      let vHtml = `<h4>🔒 ${currentLang==='sa'?'गोपनीय मतदाता सूची':'Confidential Voter List'}</h4><table style="width:100%"><thead><tr><th>Name</th><th>Mobile</th><th>Time</th><th>Vote Details</th><th></th></tr></thead><tbody>`;
+      for(const v of votersSnap.docs){
+        const voter = v.data();
+        if(!voter.voted) continue;
+        const voteQuery = query(collection(db,'votes'), where('phone','==',voter.phone));
+        const voteSnap = await getDocs(voteQuery);
+        let voteTxt = '';
+        for(const vt of voteSnap.docs){
+          const sel = vt.data().selections || {};
+          const items = await Promise.all(Object.entries(sel).map(async ([pname, cid]) => {
+            const cdoc = await getDoc(doc(db,'candidates',cid));
+            return `${pname}: ${cdoc.exists()?cdoc.data().name:'?'}`;
+          }));
+          voteTxt = items.join(' | ');
+        }
+        const removeBtn = isSuper ? `<button class="btn btn-danger btn-sm" onclick="removeIllegalVoter('${voter.phone}','${voter.name}')">🚫 Delete</button>` : '';
+        vHtml += `<tr><td>${voter.name}</td><td>${voter.phone}</td><td>${voter.votedAt?new Date(voter.votedAt.toDate()).toLocaleString():'-'}</td><td>${voteTxt}</td><td>${removeBtn}</td></tr>`;
+      }
+      vHtml += `</tbody></table><hr>`;
+      voterHtml = vHtml;
+    }
+    
+    // Settings
+    let settingsHtml = '';
+    if(isSuper) {
+      const settingsSnap = await getDoc(doc(db,'settings','main'));
+      const votingStatus = settingsSnap.exists() ? settingsSnap.data().votingEnabled : true;
+      settingsHtml = `<h4>🌐 Settings</h4><div><label>Election Title</label><input type="text" id="editTitle" value="${settingsSnap.exists()?settingsSnap.data().electionTitle||'ब्राह्मण समाज चुनाव 2026':''}"></div><button class="btn btn-primary btn-sm" onclick="updateElectionTitle()">Update Title</button> <button class="btn ${votingStatus?'btn-success':'btn-danger'} btn-sm" onclick="toggleGlobalVoting()">${votingStatus?'✅ Voting ON':'🔴 Voting OFF'}</button> <button class="btn btn-admin btn-sm" onclick="toggleResultVisibility()">📊 Result Visibility</button><hr><button class="btn btn-danger btn-sm" onclick="resetAllVotes()">🗑️ Reset All Votes</button><hr>`;
+    }
+    
+    dashDiv.innerHTML = candHtml + postsHtml + pendingHtml + adminHtml + voterHtml + settingsHtml;
+  }
+  
+  // Helper preview for new candidate photo
+  window.previewNewImage = function() {
+    const file = document.getElementById('newCandPhotoFile').files[0];
+    if(file){ const reader = new FileReader(); reader.onload = e => { document.getElementById('newPreview').src = e.target.result; document.getElementById('newPreview').style.display = 'block'; }; reader.readAsDataURL(file); }
+  };
+  
+  // Add candidate with photo upload
+  window.addCandidateWithPhoto = async function() {
+    const name = document.getElementById('newCandName').value.trim();
+    const post = document.getElementById('newCandPost').value;
+    if(!name) return alert('Enter Name');
+    const age = document.getElementById('newCandAge').value;
+    const gender = document.getElementById('newCandGender').value;
+    const phone = document.getElementById('newCandPhone').value;
+    const ward = document.getElementById('newCandWard').value;
+    const bio = document.getElementById('newCandBio').value;
+    let photoURL = "";
+    const file = document.getElementById('newCandPhotoFile').files[0];
+    if(file) {
+      try {
+        const storageRef = ref(storage, `candidate_photos/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        photoURL = await getDownloadURL(storageRef);
+      } catch(e) { alert("Photo upload failed"); }
+    }
+    await addDoc(collection(db,'candidates'), { name, post, age, gender, phone, ward, bio, photo: photoURL, votes:0 });
+    alert('Candidate Added');
+    renderAdminDashboard(); renderResults();
+    if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface();
+  };
+  
+  // ROUTE GATING FOR CANDIDATE DELETION
+  window.handleCandidateDeleteGate = async (id, name) => {
+    if (loggedInAdminRole === 'superadmin') {
+      if (confirm(`Do you really want to permanently delete candidate "${name}"?`)) {
+        await deleteDoc(doc(db, 'candidates', id));
+        alert('Candidate permanently removed.');
+        renderAdminDashboard(); renderResults();
+        if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface();
+      }
+    } else {
+      if (confirm(`You do not have direct deletion rights. Do you want to send a deletion request to Main Admin for "${name}"?`)) {
+        const snap = await getDoc(doc(db, 'candidates', id));
+        if (snap.exists()) {
+          const d = snap.data();
+          await addDoc(collection(db, 'pending_candidates'), {
+            name: d.name,
+            post: d.post,
+            age: d.age || '',
+            gender: d.gender || '',
+            phone: d.phone || '',
+            ward: d.ward || '',
+            bio: d.bio || '',
+            photo: d.photo || '',
+            candidateId: id,
+            requestType: 'delete',
+            requestedBy: loggedInUsername,
+            createdAt: new Date()
+          });
+          alert('Deletion request sent to Main Admin. The candidate will remain listed until approved.');
+          renderAdminDashboard();
+        } else {
+          alert('Error: Candidate not found');
+        }
+      }
+    }
+  };
+
+  // MAIN ADMIN APPROVAL ACTION FOR DELETION REQUESTS
+  window.approveDeletionRequest = async (pendingId, candidateId) => {
+    if (loggedInAdminRole !== 'superadmin') {
+      alert('❌ Only Main Admin can approve this request!');
+      return;
+    }
+    if (confirm('Are you sure you want to delete this candidate permanently?')) {
+      await deleteDoc(doc(db, 'candidates', candidateId));
+      await deleteDoc(doc(db, 'pending_candidates', pendingId));
+      alert('Candidate successfully removed.');
+      renderAdminDashboard(); renderResults();
+      if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface();
+    }
+  };
+  
+  // Full edit candidate
+  window.editCandidateFull = async function(candId) {
+    const snap = await getDoc(doc(db,'candidates',candId));
+    if(!snap.exists()) return alert('Not found');
+    const d = snap.data();
+    const newName = prompt("Name:", d.name); if(!newName) return;
+    const newPost = prompt("Post:", d.post); if(!newPost) return;
+    const newAge = prompt("Age:", d.age||"");
+    const newGender = prompt("Gender:", d.gender||"");
+    const newPhone = prompt("Mobile:", d.phone||"");
+    const newWard = prompt("Ward:", d.ward||"");
+    const newBio = prompt("Bio:", d.bio||"");
+    const changePhoto = confirm("Do you want to change photo?");
+    let newPhoto = d.photo || "";
+    if(changePhoto) {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if(file) {
+          const storageRef = ref(storage, `candidate_photos/${Date.now()}_${file.name}`);
+          await uploadBytes(storageRef, file);
+          newPhoto = await getDownloadURL(storageRef);
+          await updateDoc(doc(db,'candidates',candId), { name:newName, post:newPost, age:newAge, gender:newGender, phone:newPhone, ward:newWard, bio:newBio, photo:newPhoto });
+          alert('Updated');
+          renderAdminDashboard(); renderResults(); if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface();
+        }
+      };
+      fileInput.click();
+      return;
+    } else {
+      await updateDoc(doc(db,'candidates',candId), { name:newName, post:newPost, age:newAge, gender:newGender, phone:newPhone, ward:newWard, bio:newBio, photo:newPhoto });
+      alert('Updated');
+      renderAdminDashboard(); renderResults(); if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface();
+    }
+  };
+  
+  // Other admin functions
+  window.createNewPost = async () => { if(loggedInAdminRole !== 'superadmin' && loggedInAdminRole !== 'headadmin') return; const pname = document.getElementById('newPostName')?.value.trim(); if(!pname) return; await addDoc(collection(db,'posts'),{ name:pname, active:true }); await loadActivePosts(); renderAdminDashboard(); renderResults(); fillSelfPostDropdown(); if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface(); };
+  window.deletePost = async (id) => { if(loggedInAdminRole !== 'superadmin' && loggedInAdminRole !== 'headadmin') return; if(confirm('Delete?')){ await deleteDoc(doc(db,'posts',id)); await loadActivePosts(); renderAdminDashboard(); renderResults(); fillSelfPostDropdown(); } };
+  
+  window.approveCandidate = async (id) => { 
+    if (loggedInAdminRole !== 'superadmin') { alert('❌ Only Main Admin can approve!'); return; }
+    const snap = await getDoc(doc(db,'pending_candidates',id)); 
+    if(snap.exists()){ 
+      const d=snap.data(); 
+      await addDoc(collection(db,'candidates'),{ name:d.name, post:d.post, age:d.age, gender:d.gender, phone:d.phone, ward:d.ward, bio:d.bio, photo:d.photo||'', votes:0 }); 
+      await deleteDoc(doc(db,'pending_candidates',id)); 
+      renderAdminDashboard(); renderResults(); 
+      if(!document.getElementById('votingArea').classList.contains('hidden')) buildVotingInterface(); 
+    } 
+  };
+  
+  window.rejectCandidate = async (id) => { 
+    if (loggedInAdminRole !== 'superadmin') { alert('❌ Only Main Admin can reject!'); return; }
+    await deleteDoc(doc(db,'pending_candidates',id)); 
+    renderAdminDashboard(); 
+  };
+  
+  window.createSubAdmin = async () => { if(loggedInAdminRole !== 'superadmin') return; const user = document.getElementById('newSubAdminUser')?.value.trim(); const pass = document.getElementById('newSubAdminPass')?.value.trim(); const type = document.getElementById('newSubAdminType')?.value; if(!user||!pass) return; const admins = await getDocs(collection(db,'admins')); if(admins.size >= 4) return alert('Max 4 admins'); let exists=false; admins.forEach(d=>{ if(d.data().username===user) exists=true; }); if(exists) return; await addDoc(collection(db,'admins'),{ username:user, password:pass, role:type==='headadmin'?'headadmin':'subadmin', adminType:type, createdAt:new Date() }); alert('Admin Created'); renderAdminDashboard(); };
+  window.createSubAdminByHead = async () => { if(loggedInAdminRole !== 'headadmin') return; const user = document.getElementById('newSubAdminUser')?.value.trim(); const pass = document.getElementById('newSubAdminPass')?.value.trim(); if(!user||!pass) return; const admins = await getDocs(collection(db,'admins')); if(admins.size >= 4) return; let exists=false; admins.forEach(d=>{ if(d.data().username===user) exists=true; }); if(exists) return; await addDoc(collection(db,'admins'),{ username:user, password:pass, role:'subadmin', adminType:'subadmin', createdAt:new Date() }); alert('Sub-Admin Created'); renderAdminDashboard(); };
+  window.deleteSubAdmin = async (id) => { if(loggedInAdminRole !== 'superadmin' && loggedInAdminRole !== 'headadmin') return; const docSnap = await getDoc(doc(db,'admins',id)); if(docSnap.exists() && docSnap.data().username === 'Brahman2026') return alert('Cannot remove main admin'); if(confirm('Remove?')){ await deleteDoc(doc(db,'admins',id)); renderAdminDashboard(); } };
+  window.updateElectionTitle = async () => { if(loggedInAdminRole !== 'superadmin') return; const title = document.getElementById('editTitle')?.value; if(title) await setDoc(doc(db,'settings','main'),{ electionTitle:title },{ merge:true }); langData.hi.title = title; if(currentLang==='hi') document.getElementById('dynamicElectionTitle').innerText = title; };
+  window.toggleGlobalVoting = async () => { if(loggedInAdminRole !== 'superadmin') return; const ref = doc(db,'settings','main'); const snap = await getDoc(ref); const current = snap.exists() ? snap.data().votingEnabled : true; await setDoc(ref,{ votingEnabled:!current },{ merge:true }); votingEnabled = !current; renderAdminDashboard(); };
+  window.toggleResultVisibility = async () => { if(loggedInAdminRole !== 'superadmin') return; const ref = doc(db,'settings','main'); const snap = await getDoc(ref); const visible = snap.exists() ? snap.data().resultVisible : true; await setDoc(ref,{ resultVisible:!visible },{ merge:true }); document.getElementById('resultCard').style.display = !visible ? 'block' : 'none'; };
+  window.resetAllVotes = async () => { if(loggedInAdminRole !== 'superadmin') return; if(!confirm('Reset all votes?')) return; const cands = await getDocs(collection(db,'candidates')); const batch = writeBatch(db); cands.forEach(d=>{ batch.update(doc(db,'candidates',d.id),{ votes:0 }); }); const votesSnap = await getDocs(collection(db,'votes')); votesSnap.forEach(d=>{ batch.delete(doc(db,'votes',d.id)); }); const votersSnap2 = await getDocs(collection(db,'voters')); votersSnap2.forEach(d=>{ batch.delete(doc(db,'voters',d.id)); }); await batch.commit(); alert('Reset complete'); renderResults(); renderAdminDashboard(); };
+  window.removeIllegalVoter = async (phone, name) => { if(loggedInAdminRole !== 'superadmin') return; if(confirm(`Remove voter "${name}" (${phone})?`)){ const voteQuery = query(collection(db,'votes'), where('phone','==',phone)); const voteSnap = await getDocs(voteQuery); const batch = writeBatch(db); for(const v of voteSnap.docs){ const sel = v.data().selections || {}; for(const [p,cid] of Object.entries(sel)){ const cref = doc(db,'candidates',cid); const csnap = await getDoc(cref); if(csnap.exists()) batch.update(cref,{ votes: Math.max(0,(csnap.data().votes||0)-1) }); } batch.delete(doc(db,'votes',v.id)); } batch.delete(doc(db,'voters',phone)); await batch.commit(); alert('Voter Removed'); renderAdminDashboard(); renderResults(); } };
+  window.showChangePassword = function() { const newPass = prompt("Enter new password (6+ chars)"); if(newPass && newPass.length>=6 && loggedInAdminId) { updateDoc(doc(db,'admins',loggedInAdminId), { password: newPass }).then(()=> alert("Password changed")).catch(e=>alert("Error")); } else alert("Password must be 6+ characters"); };
+  window.resetAdminPassword = async (id, uname) => { if(loggedInAdminRole !== 'superadmin' && loggedInAdminRole !== 'headadmin') return; const newPass = prompt(`New password for "${uname}"`); if(newPass && newPass.length>=6) { await updateDoc(doc(db,'admins',id), { password: newPass }); alert('Reset successfully'); renderAdminDashboard(); } };
+  
+  // Admin Panel Toggling Functions
+  window.openAdminPanel = function() {
+    document.getElementById('adminPanelWrapper').classList.add('open');
+    document.getElementById('adminOverlay').classList.add('show');
+    if(loggedInAdminRole) renderAdminDashboard();
+  };
+
+  window.closeAdminPanel = function() {
+    document.getElementById('adminPanelWrapper').classList.remove('open');
+    document.getElementById('adminOverlay').classList.remove('show');
+  };
+
+  // Secure Login
+  window.adminLoginFromSidebar = async function() {
+    try {
+      const user = document.getElementById('adminUserInside').value.trim();
+      const pass = document.getElementById('adminPassInside').value.trim();
+      const msgDiv = document.getElementById('adminLoginMsgInside');
+
+      if (!user || !pass) {
+        showMsg(msgDiv, 'error', '❌ Please enter both ID and Password');
+        return;
+      }
+
+      if(user === 'Brahman2026' && pass === 'Mahraj@2026') {
+        loggedInAdminRole = 'superadmin'; loggedInUsername = 'Brahman2026'; loggedInAdminId = 'master';
+        document.getElementById('adminLoginInside').classList.add('hidden');
+        document.getElementById('adminDashboardInside').classList.remove('hidden');
+        await renderAdminDashboard();
+        showMsg(msgDiv, 'success', '✅ Main Admin Login Successful');
+        return;
+      }
+
+      const adminsSnap = await getDocs(collection(db,'admins'));
+      let valid = false, role = '', id = '';
+      
+      adminsSnap.forEach(d => { 
+        if(d.data().username === user && d.data().password === pass) { 
+          valid = true; role = d.data().role; id = d.id; loggedInUsername = user; 
+        } 
+      });
+
+      if(valid) { 
+        loggedInAdminRole = role; loggedInAdminId = id; 
+        document.getElementById('adminLoginInside').classList.add('hidden'); 
+        document.getElementById('adminDashboardInside').classList.remove('hidden'); 
+        await renderAdminDashboard(); showMsg(msgDiv,'success','✅ Login Successful'); 
+      } else { showMsg(msgDiv,'error','❌ Invalid Credentials'); }
+      
+    } catch (error) {
+      console.error("Login Error: ", error);
+      alert("Database Access Error: " + error.message);
+    }
+  };
+
+  window.adminLogout = function() { 
+    loggedInAdminRole = null; 
+    document.getElementById('adminLoginInside').classList.remove('hidden'); 
+    document.getElementById('adminDashboardInside').classList.add('hidden'); 
+    document.getElementById('adminUserInside').value = 'Brahman2026'; 
+    document.getElementById('adminPassInside').value = ''; 
+    window.closeAdminPanel(); 
+  };
+  
+  async function fillSelfPostDropdown() { const posts = await loadActivePosts(); const select = document.getElementById('selfPost'); select.innerHTML = `<option value="">${langData[currentLang].selectPostOpt}</option>`+posts.map(p=>`<option value="${p.name}">${p.name}</option>`).join(''); }
+  
+  (async function init() { 
+    try {
+      await ensureMainAdmin(); 
+      await ensureDefaultPosts(); 
+      await loadActivePosts(); 
+      await loadSettingsAndApply(); 
+      await fillSelfPostDropdown(); 
+      await renderResults(); 
+      setInterval(renderResults, 5000); 
+    } catch (e) {
+      console.error("Initialization Error: ", e);
+    }
+  })();
+</script>
+</body>
+</html>
